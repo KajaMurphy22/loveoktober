@@ -1,33 +1,202 @@
-<!doctype html>
-<html class="no-js" lang="">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
-
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
-
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
+  <meta name="theme-color" content="#fbefe9">
+  <title>A little date with Kaja ♡</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme: light; --ink:#713b4c; --pink:#cf647f; }
+    body { margin:0; min-height:100svh; background:radial-gradient(ellipse at 10% 15%,#ffe0e7,transparent 55%),radial-gradient(ellipse at 90% 90%,#f3dfcd,transparent 60%),#fcf4ee; color:var(--ink); font-family:Georgia,serif; display:grid; place-items:center; padding:28px 20px; }
+    body::before { content:'♡'; position:fixed; top:5%; right:8%; font-size:110px; color:#d68a9b26; transform:rotate(15deg); pointer-events:none; }
+    main { width:100%; max-width:440px; text-align:center; }
+    .brand { font:11px/1.5 system-ui,sans-serif; letter-spacing:4px; text-transform:uppercase; margin-bottom:28px; }
+    .paper { background:#fffaf5e8; border:1px solid #fff; border-radius:170px 170px 28px 28px; padding:55px 25px 35px; box-shadow:0 20px 70px #9a536418; min-height:460px; position:relative; }
+    .eyebrow { font:11px system-ui,sans-serif; text-transform:uppercase; letter-spacing:2.5px; color:#ab7785; margin:18px 0; }
+    h1 { font-size:clamp(32px,9vw,43px); font-weight:normal; line-height:1.14; margin:15px 0; letter-spacing:-1.3px; }
+    p { font:14px/1.7 system-ui,sans-serif; color:#a0717d; }
+    .icon { font-size:57px; display:block; margin:8px 0 20px; }
+    button { font:15px system-ui,sans-serif; cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+    button:focus-visible { outline:3px solid #713b4c; outline-offset:5px; }
+    .heart { border:0; background:transparent; font-size:92px; color:var(--pink); padding:12px 25px; animation:heartbeat 2s ease-in-out infinite; filter:drop-shadow(0 8px 12px #cf647f30); }
+    .choices { display:flex; gap:12px; justify-content:center; margin-top:30px; }
+    .pill { border:1px solid #e5c5ce; border-radius:50px; padding:16px 27px; background:#fffaf8; color:var(--ink); min-width:106px; }
+    .pill.primary { background:var(--pink); color:white; border-color:var(--pink); box-shadow:0 6px 16px #cf647f25; }
+    .pill:hover { transform:translateY(-2px); }
+    .secret { display:block; margin:42px 0 0 auto; border:0; background:transparent; text-decoration:underline; text-underline-offset:4px; font-size:12px; color:#a77b87; padding:12px 0 12px 16px; }
+    .opening-choices { position:relative; height:145px; margin-top:25px; }
+    .opening-choices #love-yes { position:absolute; top:0; left:calc(50% - 118px); }
+    .opening-choices #love-no { position:absolute; top:0; left:calc(50% + 12px); }
+    .footer { font:12px system-ui,sans-serif; color:#b18791; margin-top:25px; }
+    .dots { display:flex; gap:7px; justify-content:center; margin-top:25px; }
+    .dot { width:5px; height:5px; background:#ead0d6; border-radius:100%; }
+    .dot.active { background:var(--pink); }
+    #screen { animation:arrive .45s ease both; }
+    .cards { display:flex; gap:10px; justify-content:center; margin:28px 0; perspective:800px; }
+    .movie { flex:1; height:185px; border:0; padding:0; background:transparent; perspective:800px; min-width:0; }
+    .movie-inner { display:block; height:100%; position:relative; transform-style:preserve-3d; transition:transform .7s; }
+    .movie.flipped .movie-inner { transform:rotateY(180deg); }
+    .face { position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #d9afbc; }
+    .back { background:repeating-linear-gradient(45deg,#e7bcc9 0px,#e7bcc9 2px,#f3d9e0 2px,#f3d9e0 10px); color:#894e64; box-shadow:0 6px 12px #713b4c15; }
+    .back::before { content:''; position:absolute; inset:8px; border:1px solid #fff9; border-radius:7px; }
+    .back b { font:30px Georgia,serif; }
+    .back small { font-size:10px; margin-top:12px; }
+    .front { transform:rotateY(180deg); background:linear-gradient(145deg,#263e33,#15261e); color:#f4e8be; padding:6px; }
+    .poster-space { width:100%; height:100%; border-radius:6px; overflow:hidden; margin-bottom:8px; background:#ffffff12; }
+    .poster-space img { width:100%; height:100%; object-fit:cover; display:block; }
+    .poster-placeholder { height:100%; display:grid; place-content:center; gap:5px; font:9px/1.4 system-ui,sans-serif; color:#f4e8be; }
+    .poster-placeholder span { font-size:25px; }
+    .front b { font:bold 18px Georgia,serif; letter-spacing:1px; }
+    .front small { font:10px/1.6 system-ui,sans-serif; margin-top:12px; }
+    .photo { margin:26px auto 18px; width:210px; padding:11px 11px 30px; background:white; transform:rotate(-5deg); box-shadow:0 8px 25px #713b4c20; }
+    .photo img { width:100%; height:215px; object-fit:cover; display:block; background:#f6e2e7; }
+    .placeholder { height:215px; background:linear-gradient(145deg,#fae4e9,#edd6c8); display:grid; place-content:center; }
+    .placeholder span { font-size:64px; }
+    .placeholder small { font:12px system-ui,sans-serif; margin-top:10px; }
+    .photo figcaption { margin-top:15px; font-size:16px; font-style:italic; }
+    [hidden] { display:none !important; }
+    .sparkle { position:fixed; top:-30px; pointer-events:none; animation:fall 3.5s linear forwards; z-index:2; color:var(--pink); }
+    @keyframes heartbeat { 50% { transform:scale(1.08); } }
+    @keyframes arrive { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fall { to { transform:translateY(110svh) rotate(180deg); opacity:0; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before { animation:none !important; transition:none !important; } }
+  </style>
 </head>
-
 <body>
-
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <script src="js/app.js"></script>
-
+<main>
+  <div class="brand">a little invitation, just for you</div>
+  <div class="paper"><section id="screen" aria-live="polite"></section></div>
+  <div class="dots" aria-hidden="true"></div>
+  <div class="footer">made with love & a tiny bit of persuasion ♡</div>
+</main>
+<script>
+  // Put Kaja's picture next to this HTML file, named kaja.jpg.
+  const KAJA_PHOTO = '../img/kaja.jpg';
+  // Add the movie image beside this file, named wicked.jpg.
+  const MOVIE_IMAGE = '../img/wicked.jpg';
+  const screen = document.querySelector('#screen');
+  let step = 0;
+  let revealTimer;
+  const questions = [
+    { icon:'🍗', title:'Wanna have<br>fried chicken?', subtitle:'You, me, and something crispy, like our LOVE.' },
+    { icon:'🥕', title:'With fried<br>vegetables?', subtitle:'A little colour on our plates, because you need VEGETABLEEEES!' },
+    { icon:'🍰', title:'And carrot cake?', subtitle:'Because our date deserves a sweet ending, made from you for your sweet PRIMCESS 💅🏼✨' }
+  ];
+  function show(html, progress) {
+    document.querySelector('.paper > #love-no')?.remove();
+    screen.innerHTML = html;
+    screen.style.animation = 'none';
+    void screen.offsetWidth;
+    screen.style.animation = '';
+    document.querySelector('.dots').innerHTML = Array.from({length:6},(_,i)=>`<span class="dot ${i===progress?'active':''}"></span>`).join('');
+    const heading = screen.querySelector('h1');
+    heading.tabIndex = -1;
+    heading.focus({preventScroll:true});
+  }
+  function start() {
+    clearTimeout(revealTimer);
+    step = 0;
+    show(`<div class="eyebrow">hey, handsome</div><span class="icon" style="color:var(--pink)" aria-hidden="true">♥</span><h1>Do you really<br>love Kaja?</h1><p>Be honest, baby.</p><div class="opening-choices"><button id="love-yes" class="pill primary">Yes ♡</button><button id="love-no" class="pill" tabindex="-1" aria-label="No, catch me if you can">No</button></div>`,0);
+    const no = screen.querySelector('#love-no');
+    function dodge(event) {
+      event.preventDefault();
+      const paper = document.querySelector('.paper');
+      const bounds = paper.getBoundingClientRect();
+      const rect = no.getBoundingClientRect();
+      const yes = screen.querySelector('#love-yes').getBoundingClientRect();
+      const current = { x: rect.left - bounds.left, y: rect.top - bounds.top };
+      // Match the rounded arch, checking every corner of the button.
+      const radiusX = Math.min(170, bounds.width / 2);
+      const radiusY = 170;
+      function inside(x, y) {
+        if (x < 12 || x > bounds.width - 12 || y < 12 || y > bounds.height - 12) return false;
+        if (y < radiusY) {
+          const centerX = x < radiusX ? radiusX : x > bounds.width - radiusX ? bounds.width - radiusX : x;
+          return ((x - centerX) / (radiusX - 10)) ** 2 + ((y - radiusY) / (radiusY - 10)) ** 2 <= 1;
+        }
+        return true;
+      }
+      let position;
+      for (let attempt = 0; attempt < 100; attempt++) {
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 40 + Math.random() * 25;
+        const x = current.x + Math.cos(angle) * distance;
+        const y = current.y + Math.sin(angle) * distance;
+        const left = bounds.left + x, top = bounds.top + y;
+        const overlapsYes = left < yes.right + 8 && left + rect.width > yes.left - 8 && top < yes.bottom + 8 && top + rect.height > yes.top - 8;
+        if (!overlapsYes && inside(x, y) && inside(x + rect.width, y) && inside(x, y + rect.height) && inside(x + rect.width, y + rect.height)) {
+          position = { x, y }; break;
+        }
+      }
+      if (!position) return;
+      // Reparent into the arch so it can wander beyond the original button row.
+      if (no.parentElement !== paper) paper.append(no);
+      no.style.position = 'absolute';
+      no.style.zIndex = '3';
+      no.style.left = position.x + 'px';
+      no.style.top = position.y + 'px';
+    }
+    no.addEventListener('pointerenter', dodge);
+    no.addEventListener('pointerdown', dodge);
+    no.addEventListener('click', event => event.preventDefault());
+    screen.querySelector('#love-yes').onclick = () => {
+      hearts();
+      show(`<span class="icon" aria-hidden="true">😈</span><div class="eyebrow">challenge accepted</div><h1>We will see 😈</h1><p>I have a few very important questions…</p><button class="pill primary">Let's find out ♡</button>`,0);
+      screen.querySelector('button').onclick = question;
+    };
+  }
+  function question() {
+    const q = questions[step];
+    show(`<span class="icon" aria-hidden="true">${q.icon}</span><div class="eyebrow">our little date night</div><h1>${q.title}</h1><p>${q.subtitle}</p><div class="choices"><button class="pill primary" id="yes">Yes ♡</button><button class="pill" id="no">No</button></div>`,step+1);
+    screen.querySelector('#yes').onclick = advance;
+    screen.querySelector('#no').onclick = sad;
+  }
+  function advance() { step++; if(step < questions.length) question(); else movies(); }
+  function sad() {
+    show(`<span class="icon" aria-hidden="true">😢</span><div class="eyebrow">a tiny heartbreak</div><h1>You don't<br>love Kaja.</h1><p>My BIG BITCHY ASS was so ready for this date…</p><button class="secret">tou dont love me if you don't cliks here ... ↗</button>`,step+1);
+    screen.querySelector('button').onclick = advance;
+  }
+  function movies() {
+    show(`<div class="eyebrow">one last little decision</div><h1>Choose a movie<br>for movie night.</h1><p>Pick a mystery card. Trust your heart.</p><div class="cards">${[1,2,3].map(n=>`<button class="movie" aria-label="Choose mystery movie ${n}"><span class="movie-inner"><span class="face back"><b>✧</b><small></small></span><span class="face front" aria-hidden="true"><span class="poster-space"><img class="movie-poster" alt="Wicked movie poster"><span class="poster-placeholder" hidden><span>✧</span>movie image<br>goes here</span></span></span></span></button>`).join('')}</div><p id="reveal" hidden>Wicked with Ariana Grande.<br>What a completely unexpected choice… ♡</p><button id="continue" class="pill primary" hidden>It's a date ♡</button>`,4);
+    screen.querySelectorAll('.movie-poster').forEach(img => {
+      img.onerror = () => { img.hidden = true; img.nextElementSibling.hidden = false; };
+      img.src = MOVIE_IMAGE;
+    });
+    screen.querySelectorAll('.movie').forEach(card => card.onclick = () => {
+      screen.querySelectorAll('.movie').forEach(c => { c.disabled = true; });
+      card.classList.add('flipped');
+      card.setAttribute('aria-label','Selected: Wicked with Ariana Grande');
+      revealTimer = setTimeout(()=>{
+        const next = screen.querySelector('#continue');
+        next.hidden = false;
+        next.onclick = ending;
+        next.focus({preventScroll:true});
+      },750);
+    });
+  }
+  function ending() {
+    show(`<div class="eyebrow">okay, it's settled</div><h1>Maybe you<br>love Kaja… ♡</h1><figure class="photo"><img id="kaja" alt="Kaja"><div class="placeholder" id="photo-placeholder" hidden><span>♡</span><small>Kaja's photo goes here</small></div><figcaption>your favourite girl</figcaption></figure><p>Chicken, veggies, carrot cake & Wicked.<br>All that's missing is you.</p><button class="secret">do it all again ♡</button>`,5);
+    const img = screen.querySelector('#kaja');
+    img.onerror = () => { img.hidden = true; screen.querySelector('#photo-placeholder').hidden = false; };
+    img.src = KAJA_PHOTO;
+    screen.querySelector('button').onclick = start;
+    hearts();
+  }
+  function hearts() {
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for(let i=0;i<18;i++) {
+      const heart = document.createElement('span');
+      heart.className = 'sparkle'; heart.textContent = i%3 ? '♡' : '✧';
+      heart.setAttribute('aria-hidden','true');
+      heart.style.left = Math.random()*100+'%';
+      heart.style.fontSize = (14+Math.random()*18)+'px';
+      heart.style.animationDelay = Math.random()*.7+'s';
+      document.body.append(heart);
+      setTimeout(()=>heart.remove(),4300);
+    }
+  }
+  start();
+</script>
 </body>
-
 </html>
